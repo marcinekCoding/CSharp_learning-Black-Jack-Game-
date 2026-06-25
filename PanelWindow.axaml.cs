@@ -11,7 +11,7 @@ public partial class PanelWindow : Window
     public PanelWindow(string login)
     {
         InitializeComponent();
-        UserLogin.Text = "Twoj login: "+ login;
+        UserLogin.Text = "Your username: "+ login;
     }
     public void dodajPunkty(object sender, Avalonia.Interactivity.RoutedEventArgs e)
     {

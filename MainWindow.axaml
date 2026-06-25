@@ -2,23 +2,92 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d"
         x:Class="MojeLogowanieGUI.MainWindow"
-        Title="MojeLogowanieGUI">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
-    
-    <TextBlock Text="Logowanie do systemu Collab " HorizontalAlignment="Center" />
-    
-    <TextBox Name="LoginBox" PlaceholderText="Wpisz login" Width="200" />
-    
-    <TextBox Name="PasswordBox" PlaceholderText="Wpisz hasło" PasswordChar="*" Width="200" />
-    
-    <Button Name="LoginButton" Content="Zaloguj" Width="200" HorizontalContentAlignment="Center" Click = "ZalogujPrzycisk_Click" />
-    
-    <TextBlock Name="MessageBlock" Text="" Foreground="Red" HorizontalAlignment="Center" />
+        Title="Collab - Login"
+        Width="400" Height="450"
+        WindowStartupLocation="CenterScreen"
+        Background="#ed7811">
 
-    <Button Name="Register_button" Content="Zarejestruj się" Width="200" HorizontalContentAlignment="Center" Click = "ZarejestrujPrzycisk_Click" />
+    <Window.Styles>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#ff7a00" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#323238" />
+            <Setter Property="Foreground" Value="#ff7a00" />
+        </Style>
+    </Window.Styles>
 
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Background="#25252A" 
+                CornerRadius="15" 
+                Padding="30" 
+                Width="320">
+            
+            <StackPanel Spacing="18">
+                <TextBlock Text="Login to Collab" 
+                           FontSize="22" 
+                           FontWeight="Bold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,10"/>
+                            
+                <TextBlock Text="E-mail" 
+                           FontSize="12" 
+                           FontWeight="SemiBold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Left" 
+                           Margin="5,0,0,3"/>
+            
+                <TextBox Name="LoginBox" 
+                         PlaceholderText="Enter username" 
+                         Height="40"
+                         CornerRadius="8" 
+                         VerticalContentAlignment="Center"/>
 
-</StackPanel>
+                <TextBlock Text="Password" 
+                           FontSize="12" 
+                           FontWeight="SemiBold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Left" 
+                           Margin="5,0,0,3"/>
+ 
+                <TextBox Name="PasswordBox" 
+                         PlaceholderText="Enter password" 
+                         PasswordChar="*" 
+                         Height="40"
+                         CornerRadius="8" 
+                         VerticalContentAlignment="Center"/>
+                
+                <Button Name="LoginButton" 
+                        Classes="primary"
+                        Content="Sign In" 
+                        Background="#7f5af0" 
+                        Foreground="White"
+                        Height="40"
+                        CornerRadius="8" 
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"
+                        Click="ZalogujPrzycisk_Click" />
+                
+                <Button Name="Register_button" 
+                        Classes="secondary"
+                        Content="Create new account" 
+                        Background="Transparent" 
+                        Foreground="#94a1b2"
+                        HorizontalAlignment="Center" 
+                        Click="ZarejestrujPrzycisk_Click" />
+
+                <TextBlock Name="MessageBlock" 
+                           Text="" 
+                           Foreground="#ff5b5b" 
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

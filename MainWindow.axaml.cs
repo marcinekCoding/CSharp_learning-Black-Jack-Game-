@@ -11,18 +11,18 @@ public partial class MainWindow : Window
 
     public void ZalogujPrzycisk_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        string login_wpisany = LoginBox.Text.ToLower() ?? "";
+        string login_wpisany = LoginBox.Text?.ToLower() ?? "";
         string haslo_wpisane = PasswordBox.Text ?? "";
 
         if(login_wpisany == "marcinek" && haslo_wpisane=="1778")
         {
-            MessageBlock.Text = "wpuszczam do systemu...";
+            MessageBlock.Text = "Access granted...";
              PanelWindow ekranGlowny = new PanelWindow(login_wpisany);
             ekranGlowny.Show();
             this.Close();
             
         }else{
-            MessageBlock.Text = "wypierdalaj z systemu";
+            MessageBlock.Text = "Get the fuck out";
         }
     }
 

@@ -28,7 +28,7 @@ public partial class RegisterWindow : Window
             }
             if (!password_validation(haslo1))
             {
-            MessageBlock.Text = "masz niespełniony jeden z dwóch warunków:\n * co najmniej jedna '@' \n * co najmniej dwie liczby";
+            MessageBlock.Text = "Your password doesn't meet the requirements: \n* at least one '@' \n* at least two digits \n* no spaces";
             return;
             }
             PanelWindow ekranGlowny = new PanelWindow(login_wpisany);
@@ -54,13 +54,18 @@ public partial class RegisterWindow : Window
             }else if (char.IsDigit(c))
             {
                 digit_iterator++;
-            }
+            }else if(c == ' ') return false;
         }
         
         if(monkey_iterator < 1 || digit_iterator<2) return false;
 
         return true;
+    }
 
-
+    public void CofnijPrzycisk_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        MainWindow logowanie = new MainWindow();
+        logowanie.Show();
+        this.Close();
     }
 }
