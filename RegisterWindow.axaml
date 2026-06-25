@@ -1,0 +1,23 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MojeLogowanieGUI.RegisterWindow"
+        Title="RegisterWindow">
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+    
+    <TextBlock Text="Rejestrowanie do systemu Collab " HorizontalAlignment="Center" />
+    
+    <TextBox Name="LoginBox" PlaceholderText="Wpisz login" Width="200" />
+    
+    <TextBox Name="PasswordBox" PlaceholderText="Wpisz hasło" PasswordChar="*" Width="200" />
+    <TextBox Name="PasswordBoxV2" PlaceholderText="Wpisz hasło ponownie" PasswordChar="*" Width="200" />
+    
+    <Button Name="LoginButton" Content="Rejestruj" Width="200" HorizontalContentAlignment="Center" Click = "RejestrujPrzycisk_Click" />
+    
+    <TextBlock Name="MessageBlock" Text="" Foreground="Red" HorizontalAlignment="Center" />
+    
+    </StackPanel>
+</Window>
