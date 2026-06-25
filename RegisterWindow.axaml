@@ -15,7 +15,7 @@
     <TextBox Name="PasswordBox" PlaceholderText="Wpisz hasło" PasswordChar="*" Width="200" />
     <TextBox Name="PasswordBoxV2" PlaceholderText="Wpisz hasło ponownie" PasswordChar="*" Width="200" />
     
-    <Button Name="LoginButton" Content="Rejestruj" Width="200" HorizontalContentAlignment="Center" Click = "RejestrujPrzycisk_Click" />
+    <Button Name="LoginButton" Content="Rejestruj" Width="200" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Click = "RejestrujPrzycisk_Click" />
     
     <TextBlock TextWrapping="Wrap" Name="MessageBlock" Text="" Foreground="Red" HorizontalAlignment="Center" />
     
