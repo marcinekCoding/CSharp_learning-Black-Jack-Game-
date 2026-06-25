@@ -17,7 +17,7 @@
     
     <Button Name="LoginButton" Content="Rejestruj" Width="200" HorizontalContentAlignment="Center" Click = "RejestrujPrzycisk_Click" />
     
-    <TextBlock Name="MessageBlock" Text="" Foreground="Red" HorizontalAlignment="Center" />
+    <TextBlock TextWrapping="Wrap" Name="MessageBlock" Text="" Foreground="Red" HorizontalAlignment="Center" />
     
     </StackPanel>
 </Window>
