@@ -8,6 +8,8 @@
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
             <TextBlock Text="witaj w panelu Collab" HorizontalAlignment="Center" />
             <TextBlock Name="UserLogin" Text="Twoj login: "/>
+            <Button Name = "clicker" Content="Klikaj aby dodac punkty" Width="200" HorizontalContentAlignment="Center" Click = "dodajPunkty" />
+            <TextBox Name="Points_box" PlaceholderText="Twoje punkty" Width="200" />
         </StackPanel>
         
 </Window>
