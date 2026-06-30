@@ -10,11 +10,12 @@ namespace MojeLogowanieGUI;
 public partial class PanelWindow : Window
 {
     public static int punkty = 0;
-    public static int idx = 3;
-    private List<int> talia = new List<int>();
-    private List<int> gracz = new List<int>();
-    private List<int> krupier = new List<int>();
+    public static int idx = 0;
+    private List<Card> talia = new List<Card>();
+    private List<Card> gracz = new List<Card>();
+    private List<Card> krupier = new List<Card>();
 
+    
     public PanelWindow(string login)
     {
         InitializeComponent();
@@ -26,35 +27,34 @@ public partial class PanelWindow : Window
         Points_box.Text = punkty.ToString();
     }
 
-    public void tasuj_karty(List<int> talia)
+    public void tasuj_karty(List<Card> talia)
     {
         Random random = new Random();
         int list_size = talia.Count;
 
-        for(int i=0;i < list_size*3;i++)
+        for(int i=0;i < list_size*10;i++)
         {
         int idx1 = random.Next(list_size);        
         int idx2 = random.Next(list_size);        
 
-        // 3. Klasyczny mechanizm zamiany (swap) elementów miejscami przy użyciu zmiennej tymczasowej
-        int temp = talia[idx1];
+        Card temp = talia[idx1];
         talia[idx1] = talia[idx2];
         talia[idx2] = temp;   
         }
        
     }
 
-    public int licz_punkty(List<int> lista)
+    public int licz_punkty(List<Card> lista)
     {
         int suma = 0;
 
         foreach (var karta in lista)
         {
-            suma+=karta;
+            suma+=karta.GetBlackjackValue();
         }
         return suma;
     }
-    public int check_winner(List<int> gracz, List<int> krupier)
+    public int check_winner(List<Card> gracz, List<Card> krupier)
     {
         // checks if the player is winner
         // 0 - player loose
@@ -67,25 +67,24 @@ public partial class PanelWindow : Window
         //sparwdzanie wyniku 
         if(sum_gracz > 21) return 0;
         if(sum_gracz<sum_krupier && sum_krupier<=21) return 0;
+        
 
         if(sum_gracz == sum_krupier && sum_gracz<=21) return 2;
 
         if(sum_gracz<=21 && sum_krupier<sum_gracz) return 1;
+        if(sum_gracz<=21 && sum_krupier>21) return 1;
         return 3;
     }
 
-    public bool is_21(List<int> gracz)
-    {
-        int sum_gracz = 0;
-        foreach(int i in gracz)
-        {
-            sum_gracz+=i;
-        }
+    public bool is_21(List<Card> gracz)
+    { 
+        int sum_gracz = licz_punkty(gracz);
+        
         if(sum_gracz==21) return true;
         return false;
     }
 
-    public void dobierz_karte(List<int>gracz,List<int> talia)
+    public void dobierz_karte(List<Card>gracz,List<Card> talia)
     {
         gracz.Add(talia[idx]);
         idx++;
@@ -101,11 +100,12 @@ public partial class PanelWindow : Window
     }
 
 
-    public void wstep_bj(List<int>gracz,List<int> talia,List<int> krup)
+    public void wstep_bj(List<Card>gracz,List<Card> talia,List<Card> krupier)
     {
-        krup.Add(talia[0]);
-        gracz.Add(talia[1]);
-        gracz.Add(talia[2]);
+        dobierz_karte(krupier,talia);
+        dobierz_karte(gracz,talia);
+        dobierz_karte(gracz,talia);
+
 
     }
 
@@ -128,12 +128,15 @@ public partial class PanelWindow : Window
         talia.Clear();
         gracz.Clear();
         krupier.Clear();
-        idx = 3;
+        idx = 0;
         Verdict_box.Text = "";
 
-        for (int i = 1; i < 15; i++) // Zaczynamy od 1, kończymy na 15
+        for (int i = 2; i < 15; i++) // Zaczynamy od 1, kończymy na 15
         {
-            talia.Add(i);
+            for(int j=0;j<4;j++){
+                talia.Add(new Card((Rank)i, (Suit)j));
+            }
+            
         }
 
         tasuj_karty(talia);
@@ -152,14 +155,9 @@ public partial class PanelWindow : Window
     
 
     }
-    public bool gra_dalej(List<int> gracz)
+    public bool gra_dalej(List<Card> gracz)
     {
-        int sum_gracz = 0;
-
-        foreach (var karta in gracz)
-        {
-            sum_gracz+=karta;
-        }
+        int sum_gracz = licz_punkty(gracz);
         if(sum_gracz>21) return false;
         return true;
 
@@ -181,7 +179,7 @@ public partial class PanelWindow : Window
         }
         
     }
-    public void NieDobieraj(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    public async void NieDobieraj(object sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         //teraz krupier zaczyna dobierac
         int sum_krupier = licz_punkty(krupier);
@@ -191,6 +189,7 @@ public partial class PanelWindow : Window
             dobierz_karte(krupier,talia);
             sum_krupier = licz_punkty(krupier);
             show_result();
+            await System.Threading.Tasks.Task.Delay(1000);
         }
         int ver = check_winner(gracz,krupier);
         switch (ver)
@@ -210,5 +209,7 @@ public partial class PanelWindow : Window
         }
 
     }
+
+    
     
 }
