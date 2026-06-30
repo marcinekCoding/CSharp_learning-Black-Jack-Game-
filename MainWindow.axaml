@@ -4,12 +4,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="MojeLogowanieGUI.MainWindow"
-        Title="Collab - Login"
+        Title="Collab - Logowanie"
         Width="400" Height="450"
         WindowStartupLocation="CenterScreen"
         Background="#ed7811">
 
     <Window.Styles>
+        <Style Selector="Button /template/ ContentPresenter">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
         <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#ff7a00" />
             <Setter Property="Foreground" Value="White" />
@@ -20,14 +27,15 @@
         </Style>
     </Window.Styles>
 
-    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" >
         <Border Background="#25252A" 
                 CornerRadius="15" 
                 Padding="30" 
-                Width="320">
+                Width="320"
+                BoxShadow="0 10 25 0 #60000000">
             
             <StackPanel Spacing="18">
-                <TextBlock Text="Login to Collab" 
+                <TextBlock Text="Logowanie do Collab" 
                            FontSize="22" 
                            FontWeight="Bold" 
                            Foreground="White" 
@@ -42,7 +50,7 @@
                            Margin="5,0,0,3"/>
             
                 <TextBox Name="LoginBox" 
-                         PlaceholderText="Enter username" 
+                         PlaceholderText="Wpisz login" 
                          Height="40"
                          CornerRadius="8" 
                          VerticalContentAlignment="Center"/>
@@ -55,7 +63,7 @@
                            Margin="5,0,0,3"/>
  
                 <TextBox Name="PasswordBox" 
-                         PlaceholderText="Enter password" 
+                         PlaceholderText="Wpisz hasło" 
                          PasswordChar="*" 
                          Height="40"
                          CornerRadius="8" 
@@ -63,7 +71,7 @@
                 
                 <Button Name="LoginButton" 
                         Classes="primary"
-                        Content="Sign In" 
+                        Content="Zaloguj się" 
                         Background="#7f5af0" 
                         Foreground="White"
                         Height="40"
@@ -76,7 +84,7 @@
                 
                 <Button Name="Register_button" 
                         Classes="secondary"
-                        Content="Create new account" 
+                        Content="Stwórz nowe konto" 
                         Background="Transparent" 
                         Foreground="#94a1b2"
                         HorizontalAlignment="Center" 

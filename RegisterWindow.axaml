@@ -10,6 +10,13 @@
         Background="#ed7811">
 
     <Window.Styles>
+        <Style Selector="Button /template/ ContentPresenter">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
         <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
             <Setter Property="Background" Value="#ff7a00" />
             <Setter Property="Foreground" Value="White" />
@@ -24,7 +31,8 @@
         <Border Background="#25252A" 
                 CornerRadius="15" 
                 Padding="30" 
-                Width="320">
+                Width="320"
+                BoxShadow="0 10 25 0 #60000000">
             
             <StackPanel Spacing="18">
                 <TextBlock Text="Create Account" 

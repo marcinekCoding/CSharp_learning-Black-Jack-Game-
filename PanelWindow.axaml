@@ -9,7 +9,35 @@
             <TextBlock Text="Welcome to the Collab Panel" HorizontalAlignment="Center" />
             <TextBlock Name="UserLogin" Text="Your username: "/>
             <Button Name = "clicker" Content="Click to add points" Width="200" HorizontalContentAlignment="Center" Click = "dodajPunkty" />
-            <TextBox Name="Points_box" PlaceholderText="Your points" Width="200" />
+            <!-- Total Points Clicker Row -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <TextBlock Text="Total Points:" Width="120" VerticalAlignment="Center" />
+                <TextBox Name="Points_box" PlaceholderText="Your points" Width="200" />
+            </StackPanel>
+
+            <Button Name = "bj" Content="Click to play Black_Jack" Width="200" HorizontalContentAlignment="Center"  Click = "Black_Jack"/>
+            <Button Name = "hit_btn" Content="Dobierz kartę" Width="200" HorizontalContentAlignment="Center" Click = "DobierzKarte_Click" />
+            <Button Name = "stop_btn" Content="Nie dobieraj" Width="200" HorizontalContentAlignment="Center" Click = "NieDobieraj" />
+
+            
+            <!-- Player Points Row -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <TextBlock Text="Player Points:" Width="120" VerticalAlignment="Center" />
+                <TextBox Name="PlayerPoints_box" PlaceholderText="Player points" Width="200" />
+            </StackPanel>
+
+            <!-- Dealer Points Row -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <TextBlock Text="Dealer Points:" Width="120" VerticalAlignment="Center" />
+                <TextBox Name="KrupierPoints_box" PlaceholderText="Krupier" Width="200" />
+            </StackPanel>
+
+            <!-- Verdict Row -->
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <TextBlock Text="Verdict:" Width="120" VerticalAlignment="Center" />
+                <TextBox Name="Verdict_box" PlaceholderText="werdykt" Width="200" />
+            </StackPanel>
+
         </StackPanel>
         
 </Window>
