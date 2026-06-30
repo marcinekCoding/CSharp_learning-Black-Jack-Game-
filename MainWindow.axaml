@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         x:Class="MojeLogowanieGUI.MainWindow"
-        Title="Collab - Logowanie"
+        Title="BJ - Logowanie"
         Width="400" Height="450"
         WindowStartupLocation="CenterScreen"
         Background="#ed7811">
@@ -35,7 +35,7 @@
                 BoxShadow="0 10 25 0 #60000000">
             
             <StackPanel Spacing="18">
-                <TextBlock Text="Logowanie do Collab" 
+                <TextBlock Text="Zaloguj sie do BJ" 
                            FontSize="22" 
                            FontWeight="Bold" 
                            Foreground="White" 

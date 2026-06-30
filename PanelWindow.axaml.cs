@@ -97,6 +97,14 @@ public partial class PanelWindow : Window
         KrupierPoints_box.Text = sum_krupier.ToString();
         PlayerPoints_box.Text = sum_gracz.ToString();
 
+         PlayerCards_text.Text = string.Join("  ", gracz);
+         DealerCards_text.Text = string.Join("  ", krupier);
+    // Wyświetl ostatnio dobraną kartę (z talii — ta spod indeksu idx-1)
+    if (idx > 0 && idx <= talia.Count)
+    {
+        LastCard_text.Text = talia[idx - 1].ToString();
+    }
+
     }
 
 
@@ -112,14 +120,36 @@ public partial class PanelWindow : Window
     public void gracz_wygrywa()
     {
         Verdict_box.Text = "Gracz wygrywa";
+        ShowResultOverlay("🎉 Gracz wygrywa!", "#55efc4");
     }
     public void gracz_przegrywa()
     {
         Verdict_box.Text = "Gracz przegrywa";
+        ShowResultOverlay("💀 Gracz przegrywa!", "#e17055");
     }
     public void gracz_remisuje()
     {
         Verdict_box.Text = "Remis!";
+        ShowResultOverlay("🤝 Remis!", "#fdcb6e");
+    }
+
+    public void ShowResultOverlay(string resultText, string color)
+    {
+        ResultOverlay_text.Text = resultText;
+        ResultOverlay_text.Foreground = Avalonia.Media.Brush.Parse(color);
+        ResultOverlay_score.Text = $"Gracz: {licz_punkty(gracz)} pts  |  Krupier: {licz_punkty(krupier)} pts";
+        ResultOverlay.IsVisible = true;
+    }
+
+    public void KolejnaGra_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ResultOverlay.IsVisible = false;
+        Black_Jack(sender, e);
+    }
+
+    public void Wyjdz_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        Environment.Exit(0);
     }
 
 
@@ -130,6 +160,10 @@ public partial class PanelWindow : Window
         krupier.Clear();
         idx = 0;
         Verdict_box.Text = "";
+        PlayerCards_text.Text = "";
+        DealerCards_text.Text = "";
+        LastCard_text.Text = "🂠";
+        ResultOverlay.IsVisible = false;
 
         for (int i = 2; i < 15; i++) // Zaczynamy od 1, kończymy na 15
         {
@@ -189,7 +223,7 @@ public partial class PanelWindow : Window
             dobierz_karte(krupier,talia);
             sum_krupier = licz_punkty(krupier);
             show_result();
-            await System.Threading.Tasks.Task.Delay(1000);
+            await System.Threading.Tasks.Task.Delay(4000);
         }
         int ver = check_winner(gracz,krupier);
         switch (ver)

@@ -2,10 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+        mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="720"
         x:Class="MojeLogowanieGUI.PanelWindow"
         Title="♠ Blackjack Panel ♠"
-        Width="900" Height="650"
+        Width="960" Height="720"
         Background="#1a1a2e">
 
     <Window.Styles>
@@ -39,7 +39,7 @@
             <Setter Property="Background" Value="#00a884"/>
         </Style>
 
-        <!-- Hit button (gold) -->
+        <!-- Hit button (orange) -->
         <Style Selector="Button.btn-hit">
             <Setter Property="Background" Value="#e17055"/>
             <Setter Property="Foreground" Value="White"/>
@@ -54,7 +54,7 @@
             <Setter Property="Background" Value="#d35400"/>
         </Style>
 
-        <!-- Stand button (blue) -->
+        <!-- Stand button (purple) -->
         <Style Selector="Button.btn-stand">
             <Setter Property="Background" Value="#6c5ce7"/>
             <Setter Property="Foreground" Value="White"/>
@@ -137,160 +137,311 @@
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+
+        <!-- Cards display (big card symbols) -->
+        <Style Selector="TextBlock.cards-display">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Last drawn card highlight -->
+        <Style Selector="Border.last-card-box">
+            <Setter Property="Background" Value="#0a0a1a"/>
+            <Setter Property="BorderBrush" Value="#fdcb6e"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Overlay button styles -->
+        <Style Selector="Button.btn-play-again">
+            <Setter Property="Background" Value="#00b894"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="200"/>
+        </Style>
+        <Style Selector="Button.btn-play-again:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#00a884"/>
+        </Style>
+
+        <Style Selector="Button.btn-exit">
+            <Setter Property="Background" Value="#d63031"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="200"/>
+        </Style>
+        <Style Selector="Button.btn-exit:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#c0392b"/>
+        </Style>
     </Window.Styles>
 
-    <!-- Main layout -->
-    <Grid RowDefinitions="Auto,*" Margin="30">
+    <!-- Root Panel allows overlay to sit on top of content -->
+    <Panel>
 
-        <!-- ===== HEADER ===== -->
-        <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,20">
-            <TextBlock Text="♠ ♥ ♣ ♦" 
-                       FontSize="28" 
-                       HorizontalAlignment="Center" 
-                       Foreground="#e17055"
-                       FontWeight="Bold"/>
-            <TextBlock Text="BLACKJACK" 
-                       FontSize="32" 
-                       FontWeight="Bold" 
-                       HorizontalAlignment="Center"
-                       Foreground="White"
-                       LetterSpacing="6"/>
-            <TextBlock Name="UserLogin" 
-                       Text="Your username: " 
-                       FontSize="13"
-                       HorizontalAlignment="Center"
-                       Foreground="#636e72"/>
-        </StackPanel>
+        <!-- Main layout -->
+        <Grid RowDefinitions="Auto,*" Margin="24">
 
-        <!-- ===== CONTENT ===== -->
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,*">
-            
-            <!-- ===== LEFT PANEL: Clicker mini-game ===== -->
-            <Border Grid.Column="0" Classes="card-panel" Margin="0,0,12,0" VerticalAlignment="Top">
-                <StackPanel Spacing="14">
-                    <TextBlock Text="🎯 CLICKER" 
-                               FontSize="16" FontWeight="Bold" 
-                               HorizontalAlignment="Center"
-                               Foreground="#b2bec3"/>
-                    
-                    <Button Name="clicker" 
-                            Content="+ Add Point" 
-                            Classes="btn-clicker"
-                            Width="160"
-                            Click="dodajPunkty"/>
-                    
-                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                        <TextBlock Text="Score:" Classes="label" Width="50"/>
-                        <TextBox Name="Points_box" 
-                                 Classes="clicker-field"
-                                 PlaceholderText="0" 
-                                 Width="100"/>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
+            <!-- ===== HEADER ===== -->
+            <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+                <TextBlock Text="♠ ♥ ♣ ♦" 
+                           FontSize="28" 
+                           HorizontalAlignment="Center" 
+                           Foreground="#e17055"
+                           FontWeight="Bold"/>
+                <TextBlock Text="BLACKJACK" 
+                           FontSize="32" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"
+                           Foreground="White"
+                           LetterSpacing="6"/>
+                <TextBlock Name="UserLogin" 
+                           Text="Your username: " 
+                           FontSize="13"
+                           HorizontalAlignment="Center"
+                           Foreground="#636e72"/>
+            </StackPanel>
 
-            <!-- ===== CENTER PANEL: Blackjack game ===== -->
-            <Border Grid.Column="1" Classes="card-panel" Width="420">
-                <StackPanel Spacing="18">
-                    
-                    <!-- New Game button -->
-                    <Button Name="bj" 
-                            Content="🃏  NEW GAME" 
-                            Classes="btn-accent"
-                            Width="240"
-                            HorizontalAlignment="Center"
-                            Click="Black_Jack"/>
-
-                    <Separator Background="#0f3460" Height="1" Margin="0,2"/>
-
-                    <!-- Dealer section -->
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="DEALER" 
-                                   FontSize="12" FontWeight="Bold"
-                                   Foreground="#e17055"
-                                   LetterSpacing="3"
-                                   HorizontalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
-                            <TextBlock Text="Cards / Points:" Classes="game-label" Width="120"/>
-                            <TextBox Name="KrupierPoints_box" 
-                                     Classes="game-field"
-                                     PlaceholderText="—" 
-                                     Width="220"/>
+            <!-- ===== CONTENT ===== -->
+            <Grid Grid.Row="1" ColumnDefinitions="180,*,180">
+                
+                <!-- ===== LEFT PANEL: Clicker mini-game ===== -->
+                <Border Grid.Column="0" Classes="card-panel" Margin="0,0,10,0" VerticalAlignment="Top">
+                    <StackPanel Spacing="14">
+                        <TextBlock Text="🎯 CLICKER" 
+                                   FontSize="15" FontWeight="Bold" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#b2bec3"/>
+                        
+                        <Button Name="clicker" 
+                                Content="+ Add Point" 
+                                Classes="btn-clicker"
+                                Width="140"
+                                Click="dodajPunkty"/>
+                        
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <TextBlock Text="Score:" Classes="label" Width="46"/>
+                            <TextBox Name="Points_box" 
+                                     Classes="clicker-field"
+                                     PlaceholderText="0" 
+                                     Width="80"/>
                         </StackPanel>
                     </StackPanel>
+                </Border>
 
-                    <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+                <!-- ===== CENTER PANEL: Blackjack game ===== -->
+                <Border Grid.Column="1" Classes="card-panel" Margin="0">
+                    <StackPanel Spacing="14">
+                        
+                        <!-- New Game button -->
+                        <Button Name="bj" 
+                                Content="🃏  NEW GAME" 
+                                Classes="btn-accent"
+                                Width="240"
+                                HorizontalAlignment="Center"
+                                Click="Black_Jack"/>
 
-                    <!-- Player section -->
-                    <StackPanel Spacing="8">
-                        <TextBlock Text="PLAYER" 
-                                   FontSize="12" FontWeight="Bold"
-                                   Foreground="#00b894"
-                                   LetterSpacing="3"
-                                   HorizontalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
-                            <TextBlock Text="Cards / Points:" Classes="game-label" Width="120"/>
-                            <TextBox Name="PlayerPoints_box" 
-                                     Classes="game-field"
-                                     PlaceholderText="—" 
-                                     Width="220"/>
+                        <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+
+                        <!-- ===== DEALER SECTION ===== -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="DEALER" 
+                                       FontSize="12" FontWeight="Bold"
+                                       Foreground="#e17055"
+                                       LetterSpacing="3"
+                                       HorizontalAlignment="Center"/>
+                            
+                            <!-- Dealer cards visual -->
+                            <Border Background="#0d1b2a" CornerRadius="10" Padding="12,8" MinHeight="50">
+                                <TextBlock Name="DealerCards_text"
+                                           Classes="cards-display"
+                                           Foreground="#e17055"
+                                           Text=""/>
+                            </Border>
+
+                            <!-- Dealer points -->
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="Points:" Classes="game-label" Width="60"/>
+                                <TextBox Name="KrupierPoints_box" 
+                                         Classes="game-field"
+                                         PlaceholderText="—" 
+                                         Width="120"/>
+                            </StackPanel>
                         </StackPanel>
+
+                        <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+
+                        <!-- ===== PLAYER SECTION ===== -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="PLAYER" 
+                                       FontSize="12" FontWeight="Bold"
+                                       Foreground="#00b894"
+                                       LetterSpacing="3"
+                                       HorizontalAlignment="Center"/>
+
+                            <!-- Player cards visual -->
+                            <Border Background="#0d1b2a" CornerRadius="10" Padding="12,8" MinHeight="50">
+                                <TextBlock Name="PlayerCards_text"
+                                           Classes="cards-display"
+                                           Foreground="#00b894"
+                                           Text=""/>
+                            </Border>
+
+                            <!-- Player points -->
+                            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                <TextBlock Text="Points:" Classes="game-label" Width="60"/>
+                                <TextBox Name="PlayerPoints_box" 
+                                         Classes="game-field"
+                                         PlaceholderText="—" 
+                                         Width="120"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+
+                        <!-- ===== LAST DRAWN CARD ===== -->
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="LAST DRAWN" 
+                                       FontSize="10" FontWeight="Bold"
+                                       Foreground="#636e72"
+                                       LetterSpacing="2"
+                                       HorizontalAlignment="Center"/>
+                            <Border Classes="last-card-box">
+                                <TextBlock Name="LastCard_text"
+                                           FontSize="36"
+                                           FontWeight="Bold"
+                                           Foreground="#fdcb6e"
+                                           HorizontalAlignment="Center"
+                                           Text="🂠"/>
+                            </Border>
+                        </StackPanel>
+
+                        <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+
+                        <!-- Action buttons -->
+                        <StackPanel Orientation="Horizontal" 
+                                    Spacing="16" 
+                                    HorizontalAlignment="Center">
+                            <Button Name="hit_btn" 
+                                    Content="🂠 HIT" 
+                                    Classes="btn-hit"
+                                    Width="140"
+                                    Click="DobierzKarte_Click"/>
+                            <Button Name="stop_btn" 
+                                    Content="✋ STAND" 
+                                    Classes="btn-stand"
+                                    Width="140"
+                                    Click="NieDobieraj"/>
+                        </StackPanel>
+
+                        <Separator Background="#0f3460" Height="1" Margin="0,2"/>
+
+                        <!-- Verdict -->
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="VERDICT" 
+                                       FontSize="10" FontWeight="Bold"
+                                       Foreground="#636e72"
+                                       LetterSpacing="3"
+                                       HorizontalAlignment="Center"/>
+                            <TextBox Name="Verdict_box" 
+                                     Classes="verdict-field"
+                                     PlaceholderText="Start a game..."
+                                     Width="340"
+                                     HorizontalAlignment="Center"/>
+                        </StackPanel>
+
                     </StackPanel>
+                </Border>
 
-                    <Separator Background="#0f3460" Height="1" Margin="0,2"/>
-
-                    <!-- Action buttons -->
-                    <StackPanel Orientation="Horizontal" 
-                                Spacing="16" 
-                                HorizontalAlignment="Center">
-                        <Button Name="hit_btn" 
-                                Content="🂠 HIT" 
-                                Classes="btn-hit"
-                                Width="140"
-                                Click="DobierzKarte_Click"/>
-                        <Button Name="stop_btn" 
-                                Content="✋ STAND" 
-                                Classes="btn-stand"
-                                Width="140"
-                                Click="NieDobieraj"/>
+                <!-- ===== RIGHT PANEL: Info ===== -->
+                <Border Grid.Column="2" Classes="card-panel" Margin="10,0,0,0" VerticalAlignment="Top">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="📊 INFO" 
+                                   FontSize="15" FontWeight="Bold" 
+                                   HorizontalAlignment="Center"
+                                   Foreground="#b2bec3"/>
+                        <TextBlock Text="♠ Ace = 11 pts" Foreground="#636e72" FontSize="12"/>
+                        <TextBlock Text="♥ J, Q, K = 10 pts" Foreground="#636e72" FontSize="12"/>
+                        <TextBlock Text="♦ 2-10 = face value" Foreground="#636e72" FontSize="12"/>
+                        <TextBlock Text="♣ Dealer stands on 17" Foreground="#636e72" FontSize="12"/>
+                        <Separator Background="#0f3460" Height="1" Margin="0,6"/>
+                        <TextBlock Text="Beat the dealer" Foreground="#636e72" FontSize="11" FontStyle="Italic" HorizontalAlignment="Center"/>
+                        <TextBlock Text="without going over 21!" Foreground="#636e72" FontSize="11" FontStyle="Italic" HorizontalAlignment="Center"/>
                     </StackPanel>
+                </Border>
 
-                    <Separator Background="#0f3460" Height="1" Margin="0,2"/>
-
-                    <!-- Verdict -->
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="VERDICT" 
-                                   FontSize="11" FontWeight="Bold"
-                                   Foreground="#636e72"
-                                   LetterSpacing="3"
-                                   HorizontalAlignment="Center"/>
-                        <TextBox Name="Verdict_box" 
-                                 Classes="verdict-field"
-                                 PlaceholderText="Start a game..."
-                                 Width="340"
-                                 HorizontalAlignment="Center"/>
-                    </StackPanel>
-
-                </StackPanel>
-            </Border>
-
-            <!-- ===== RIGHT PANEL: placeholder for future features ===== -->
-            <Border Grid.Column="2" Classes="card-panel" Margin="12,0,0,0" VerticalAlignment="Top">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="📊 INFO" 
-                               FontSize="16" FontWeight="Bold" 
-                               HorizontalAlignment="Center"
-                               Foreground="#b2bec3"/>
-                    <TextBlock Text="♠ Ace = 11 pts" Foreground="#636e72" FontSize="12"/>
-                    <TextBlock Text="♥ J, Q, K = 10 pts" Foreground="#636e72" FontSize="12"/>
-                    <TextBlock Text="♦ 2-10 = face value" Foreground="#636e72" FontSize="12"/>
-                    <TextBlock Text="♣ Dealer stands on 17" Foreground="#636e72" FontSize="12"/>
-                    <Separator Background="#0f3460" Height="1" Margin="0,6"/>
-                    <TextBlock Text="Beat the dealer" Foreground="#636e72" FontSize="11" FontStyle="Italic" HorizontalAlignment="Center"/>
-                    <TextBlock Text="without going over 21!" Foreground="#636e72" FontSize="11" FontStyle="Italic" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Border>
-
+            </Grid>
         </Grid>
-    </Grid>
+
+        <!-- ===== RESULT OVERLAY (hidden by default) ===== -->
+        <Border Name="ResultOverlay"
+                IsVisible="False"
+                Background="#CC000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ZIndex="100">
+            <Border Background="#1e2a3a"
+                    BorderBrush="#0f3460"
+                    BorderThickness="2"
+                    CornerRadius="20"
+                    Padding="40,32"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    MinWidth="400">
+                <StackPanel Spacing="20" HorizontalAlignment="Center">
+                    
+                    <!-- Title -->
+                    <TextBlock Text="🏆 GAME OVER" 
+                               FontSize="24" 
+                               FontWeight="Bold"
+                               Foreground="#fdcb6e"
+                               HorizontalAlignment="Center"
+                               LetterSpacing="4"/>
+
+                    <!-- Result text -->
+                    <TextBlock Name="ResultOverlay_text"
+                               Text=""
+                               FontSize="28"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Foreground="#55efc4"/>
+
+                    <!-- Score summary -->
+                    <StackPanel Spacing="4" HorizontalAlignment="Center">
+                        <TextBlock Name="ResultOverlay_score"
+                                   Text=""
+                                   FontSize="14"
+                                   Foreground="#b2bec3"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Separator Background="#0f3460" Height="1" Margin="0,4"/>
+
+                    <!-- Buttons -->
+                    <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center">
+                        <Button Content="🃏 Kolejna gra"
+                                Classes="btn-play-again"
+                                Click="KolejnaGra_Click"/>
+                        <Button Content="🚪 Wyjdź"
+                                Classes="btn-exit"
+                                Click="Wyjdz_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+
+    </Panel>
 </Window>
