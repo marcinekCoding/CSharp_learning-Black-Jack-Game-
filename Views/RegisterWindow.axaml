@@ -3,9 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        x:Class="MojeLogowanieGUI.MainWindow"
-        Title="BJ - Logowanie"
-        Width="400" Height="450"
+        x:Class="MojeLogowanieGUI.Views.RegisterWindow"
+        Title="Collab - Register"
+        Width="400" Height="500"
         WindowStartupLocation="CenterScreen"
         Background="#ed7811">
 
@@ -27,7 +27,7 @@
         </Style>
     </Window.Styles>
 
-    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" >
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
         <Border Background="#25252A" 
                 CornerRadius="15" 
                 Padding="30" 
@@ -35,35 +35,28 @@
                 BoxShadow="0 10 25 0 #60000000">
             
             <StackPanel Spacing="18">
-                <TextBlock Text="Zaloguj sie do BJ" 
+                <TextBlock Text="Create Account" 
                            FontSize="22" 
                            FontWeight="Bold" 
                            Foreground="White" 
                            HorizontalAlignment="Center" 
                            Margin="0,0,0,10"/>
-                            
-                <TextBlock Text="E-mail" 
-                           FontSize="12" 
-                           FontWeight="SemiBold" 
-                           Foreground="White" 
-                           HorizontalAlignment="Left" 
-                           Margin="5,0,0,3"/>
-            
+                
                 <TextBox Name="LoginBox" 
-                         PlaceholderText="Wpisz login" 
+                         PlaceholderText="Enter username" 
+                         Height="40"
+                         CornerRadius="8" 
+                         VerticalContentAlignment="Center"/>
+                
+                <TextBox Name="PasswordBox" 
+                         PlaceholderText="Enter password" 
+                         PasswordChar="*" 
                          Height="40"
                          CornerRadius="8" 
                          VerticalContentAlignment="Center"/>
 
-                <TextBlock Text="Password" 
-                           FontSize="12" 
-                           FontWeight="SemiBold" 
-                           Foreground="White" 
-                           HorizontalAlignment="Left" 
-                           Margin="5,0,0,3"/>
- 
-                <TextBox Name="PasswordBox" 
-                         PlaceholderText="Wpisz hasło" 
+                <TextBox Name="PasswordBoxV2" 
+                         PlaceholderText="Confirm password" 
                          PasswordChar="*" 
                          Height="40"
                          CornerRadius="8" 
@@ -71,8 +64,8 @@
                 
                 <Button Name="LoginButton" 
                         Classes="primary"
-                        Content="Zaloguj się" 
-                        Background="#7f5af0" 
+                        Content="Sign Up" 
+                        Background="#2cb67d" 
                         Foreground="White"
                         Height="40"
                         CornerRadius="8" 
@@ -80,15 +73,15 @@
                         HorizontalAlignment="Stretch" 
                         HorizontalContentAlignment="Center" 
                         VerticalContentAlignment="Center"
-                        Click="ZalogujPrzycisk_Click" />
+                        Click="RejestrujPrzycisk_Click" />
                 
-                <Button Name="Register_button" 
+                <Button Name="Back_button" 
                         Classes="secondary"
-                        Content="Stwórz nowe konto" 
+                        Content="Back to login" 
                         Background="Transparent" 
                         Foreground="#94a1b2"
                         HorizontalAlignment="Center" 
-                        Click="ZarejestrujPrzycisk_Click" />
+                        Click="CofnijPrzycisk_Click" />
 
                 <TextBlock Name="MessageBlock" 
                            Text="" 

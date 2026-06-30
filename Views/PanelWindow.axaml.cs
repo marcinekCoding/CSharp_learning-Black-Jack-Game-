@@ -4,8 +4,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using HarfBuzzSharp;
+using MojeLogowanieGUI.Models;
 
-namespace MojeLogowanieGUI;
+namespace MojeLogowanieGUI.Views;
 
 public partial class PanelWindow : Window
 {

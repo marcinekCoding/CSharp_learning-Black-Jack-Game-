@@ -1,5 +1,5 @@
 using System;
-namespace MojeLogowanieGUI;
+namespace MojeLogowanieGUI.Models;
 
 public enum Suit
 {

@@ -1,4 +1,4 @@
-# ♠ MojeLogowanieGUI — Blackjack ♠
+# ♠ Logowanie + Blackjack ♠
 
 Prosta desktopowa gra **Blackjack** z modułem logowania i tworzenia konta, napisana w **C#** z wykorzystaniem frameworka **Avalonia UI**.
 

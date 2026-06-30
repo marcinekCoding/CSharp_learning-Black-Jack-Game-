@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Markup.Xaml;
 
-namespace MojeLogowanieGUI;
+namespace MojeLogowanieGUI.Views;
 
 public partial class RegisterWindow : Window
 {

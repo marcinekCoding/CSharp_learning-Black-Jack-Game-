@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="720"
-        x:Class="MojeLogowanieGUI.PanelWindow"
+        x:Class="MojeLogowanieGUI.Views.PanelWindow"
         Title="♠ Blackjack Panel ♠"
         Width="960" Height="720"
         Background="#1a1a2e">

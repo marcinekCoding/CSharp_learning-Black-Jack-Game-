@@ -1,6 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 
-namespace MojeLogowanieGUI;
+namespace MojeLogowanieGUI.Views;
 
 public partial class MainWindow : Window
 {
