@@ -1,250 +1,287 @@
 using System;
 using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using HarfBuzzSharp;
 using MojeLogowanieGUI.Models;
+using MojeLogowanieGUI.Services;
 
 namespace MojeLogowanieGUI.Views;
 
 public partial class PanelWindow : Window
 {
-    public static int punkty = 0;
-    public static int idx = 0;
-    private List<Card> talia = new List<Card>();
-    private List<Card> gracz = new List<Card>();
-    private List<Card> krupier = new List<Card>();
+    private readonly BlackjackEngine _engine = new();
+    private RoundState _roundState;
 
-    
+    /// <summary>Mini-gra clicker po lewej stronie panelu (osobne od salda blackjacka).</summary>
+    public static int ClickerScore;
+
     public PanelWindow(string login)
     {
         InitializeComponent();
-        UserLogin.Text = "Your username: "+ login;
-    }
-    public void dodajPunkty(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        punkty++;
-        Points_box.Text = punkty.ToString();
+        UserLogin.Text = "Your username: " + login;
+        SetWaitingForBetUi();
+        RefreshBettingUi();
     }
 
-    public void tasuj_karty(List<Card> talia)
-    {
-        Random random = new Random();
-        int list_size = talia.Count;
+    // ── Clicker (mini-gra) ──────────────────────────────────────────────
 
-        for(int i=0;i < list_size*10;i++)
+    public void dodajPunkty(object sender, RoutedEventArgs e)
+    {
+        ClickerScore++;
+        Points_box.Text = ClickerScore.ToString();
+    }
+
+    // ── Przyciski gry ─────────────────────────────────────────────────
+
+    public void Black_Jack(object sender, RoutedEventArgs e)
+    {
+        _engine.PrepareNewRound();
+        ClearTableUi();
+        ResultOverlay.IsVisible = false;
+        Wallet.ClearBet();
+        SetWaitingForBetUi();
+        ShowBetValidationMessage("Postaw zaklad, aby rozpoczac runde.");
+        PlayerCards_text.Text = "Czekamy na obstawienie";
+    }
+
+    public void PlaceBet_Click(object sender, RoutedEventArgs e)
+    {
+        int? betValue = TryReadBetFromInput();
+        if (betValue is null)
         {
-        int idx1 = random.Next(list_size);        
-        int idx2 = random.Next(list_size);        
-
-        Card temp = talia[idx1];
-        talia[idx1] = talia[idx2];
-        talia[idx2] = temp;   
+            ShowBetValidationMessage("Wpisz poprawna stawke (liczba calkowita > 0).");
+            return;
         }
-       
-    }
 
-    public int licz_punkty(List<Card> lista)
-    {
-        int suma = 0;
-
-        foreach (var karta in lista)
+        if (!Wallet.TryPlaceBet(betValue.Value))
         {
-            suma+=karta.GetBlackjackValue();
+            ShowBetValidationMessage("Zaklad odrzucony. Sprawdz saldo i sprobuj ponownie.");
+            SetWaitingForBetUi();
+            RefreshBettingUi();
+            return;
         }
-        return suma;
+
+        SetPlayingUi();
+        RefreshBettingUi();
+        ShowBetValidationMessage("Zaklad przyjety. Rozpoczynam gre...");
+        StartRoundAfterBet();
     }
-    public int check_winner(List<Card> gracz, List<Card> krupier)
+
+    public void DobierzKarte_Click(object sender, RoutedEventArgs e)
     {
-        // checks if the player is winner
-        // 0 - player loose
-        // 1 - player win
-        // 2 - draw
-        // 3 - undefined behavioiur
-        int sum_gracz = licz_punkty(gracz);
-        int sum_krupier = licz_punkty(krupier);
+        if (_roundState != RoundState.Playing)
+        {
+            Verdict_box.Text = "Najpierw postaw zaklad!";
+            return;
+        }
 
-        //sparwdzanie wyniku 
-        if(sum_gracz > 21) return 0;
-        if(sum_gracz<sum_krupier && sum_krupier<=21) return 0;
-        
+        if (_engine.PlayerHand.Count == 0)
+        {
+            Verdict_box.Text = "Rozpocznij gre!";
+            return;
+        }
 
-        if(sum_gracz == sum_krupier && sum_gracz<=21) return 2;
+        _engine.HitPlayer();
+        RefreshGameUi();
 
-        if(sum_gracz<=21 && sum_krupier<sum_gracz) return 1;
-        if(sum_gracz<=21 && sum_krupier>21) return 1;
-        return 3;
+        if (!_engine.CanPlayerContinue())
+        {
+            ShowPlayerLoses();
+            FinishRound();
+        }
     }
 
-    public bool is_21(List<Card> gracz)
-    { 
-        int sum_gracz = licz_punkty(gracz);
-        
-        if(sum_gracz==21) return true;
-        return false;
-    }
-
-    public void dobierz_karte(List<Card>gracz,List<Card> talia)
+    public async void NieDobieraj(object sender, RoutedEventArgs e)
     {
-        gracz.Add(talia[idx]);
-        idx++;
+        if (_roundState != RoundState.Playing)
+            return;
+
+        int dealerSum = BlackjackEngine.CalculateHandValue(_engine.DealerHand);
+        if (dealerSum == 0)
+            return;
+
+        while (dealerSum <= 16)
+        {
+            _engine.HitDealer();
+            dealerSum = BlackjackEngine.CalculateHandValue(_engine.DealerHand);
+            RefreshGameUi();
+            await System.Threading.Tasks.Task.Delay(4000);
+        }
+
+        ResolveRound(_engine.CheckWinner());
     }
 
-    public void show_result()
-    {
-        int sum_gracz = licz_punkty(gracz);
-        int sum_krupier = licz_punkty(krupier);
-        KrupierPoints_box.Text = sum_krupier.ToString();
-        PlayerPoints_box.Text = sum_gracz.ToString();
-
-         PlayerCards_text.Text = string.Join("  ", gracz);
-         DealerCards_text.Text = string.Join("  ", krupier);
-    // Wyświetl ostatnio dobraną kartę (z talii — ta spod indeksu idx-1)
-    if (idx > 0 && idx <= talia.Count)
-    {
-        LastCard_text.Text = talia[idx - 1].ToString();
-    }
-
-    }
-
-
-    public void wstep_bj(List<Card>gracz,List<Card> talia,List<Card> krupier)
-    {
-        dobierz_karte(krupier,talia);
-        dobierz_karte(gracz,talia);
-        dobierz_karte(gracz,talia);
-
-
-    }
-
-    public void gracz_wygrywa()
-    {
-        Verdict_box.Text = "Gracz wygrywa";
-        ShowResultOverlay("🎉 Gracz wygrywa!", "#55efc4");
-    }
-    public void gracz_przegrywa()
-    {
-        Verdict_box.Text = "Gracz przegrywa";
-        ShowResultOverlay("💀 Gracz przegrywa!", "#e17055");
-    }
-    public void gracz_remisuje()
-    {
-        Verdict_box.Text = "Remis!";
-        ShowResultOverlay("🤝 Remis!", "#fdcb6e");
-    }
-
-    public void ShowResultOverlay(string resultText, string color)
-    {
-        ResultOverlay_text.Text = resultText;
-        ResultOverlay_text.Foreground = Avalonia.Media.Brush.Parse(color);
-        ResultOverlay_score.Text = $"Gracz: {licz_punkty(gracz)} pts  |  Krupier: {licz_punkty(krupier)} pts";
-        ResultOverlay.IsVisible = true;
-    }
-
-    public void KolejnaGra_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    public void KolejnaGra_Click(object sender, RoutedEventArgs e)
     {
         ResultOverlay.IsVisible = false;
-        Black_Jack(sender, e);
+        ClearBetInput();
+        Black_Jack(this, new RoutedEventArgs());
     }
 
-    public void Wyjdz_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    public void Wyjdz_Click(object sender, RoutedEventArgs e)
     {
         Environment.Exit(0);
     }
 
+    // ── Flow rundy ────────────────────────────────────────────────────
 
-    public void Black_Jack(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void StartRoundAfterBet()
     {
-        talia.Clear();
-        gracz.Clear();
-        krupier.Clear();
-        idx = 0;
+        _engine.DealInitialCards();
+        RefreshGameUi();
+
+        if (BlackjackEngine.IsBlackjack(_engine.PlayerHand))
+        {
+            Wallet.ResolveBlackjack();
+            ShowPlayerWins(isBlackjack: true);
+            FinishRound();
+        }
+    }
+
+    private void ResolveRound(GameResult result)
+    {
+        switch (result)
+        {
+            case GameResult.PlayerWin:
+                Wallet.ResolveWin();
+                ShowPlayerWins();
+                break;
+            case GameResult.PlayerLose:
+                ShowPlayerLoses();
+                break;
+            case GameResult.Draw:
+                Wallet.ResolveDraw();
+                ShowDraw();
+                break;
+            default:
+                Verdict_box.Text = "Nieoczekiwany wynik";
+                break;
+        }
+
+        FinishRound();
+    }
+
+    private void FinishRound()
+    {
+        SetRoundFinishedUi();
+        RefreshBettingUi();
+    }
+
+    // ── Komunikaty wyniku ─────────────────────────────────────────────
+
+    private void ShowPlayerWins(bool isBlackjack = false)
+    {
+        Verdict_box.Text = isBlackjack ? "Blackjack!" : "Gracz wygrywa";
+        string overlayText = isBlackjack ? "🃏 Blackjack!" : "🎉 Gracz wygrywa!";
+        ShowResultOverlay(overlayText, "#55efc4", Wallet.CurrentBet);
+    }
+
+    private void ShowPlayerLoses()
+    {
+        Verdict_box.Text = "Gracz przegrywa";
+        ShowResultOverlay("💀 Gracz przegrywa!", "#e17055", -Wallet.CurrentBet);
+    }
+
+    private void ShowDraw()
+    {
+        Verdict_box.Text = "Remis!";
+        ShowResultOverlay("🤝 Remis!", "#fdcb6e", 0);
+    }
+
+    private void ShowResultOverlay(string resultText, string color, int moneyDelta)
+    {
+        ResultOverlay_text.Text = resultText;
+        ResultOverlay_text.Foreground = Avalonia.Media.Brush.Parse(color);
+        ResultOverlay_score.Text =
+            $"Gracz: {BlackjackEngine.CalculateHandValue(_engine.PlayerHand)} pts  |  " +
+            $"Krupier: {BlackjackEngine.CalculateHandValue(_engine.DealerHand)} pts";
+        ShowRoundMoneyResult(moneyDelta);
+        ResultOverlay.IsVisible = true;
+    }
+
+    // ── UI helpers ────────────────────────────────────────────────────
+
+    private void RefreshGameUi()
+    {
+        int playerSum = BlackjackEngine.CalculateHandValue(_engine.PlayerHand);
+        int dealerSum = BlackjackEngine.CalculateHandValue(_engine.DealerHand);
+
+        PlayerPoints_box.Text = playerSum.ToString();
+        KrupierPoints_box.Text = dealerSum.ToString();
+        PlayerCards_text.Text = string.Join("  ", _engine.PlayerHand);
+        DealerCards_text.Text = string.Join("  ", _engine.DealerHand);
+
+        if (_engine.LastDrawnCard is not null)
+        {
+            LastCard_text.Text = _engine.LastDrawnCard.ToString();
+        }
+    }
+
+    private void ClearTableUi()
+    {
         Verdict_box.Text = "";
         PlayerCards_text.Text = "";
         DealerCards_text.Text = "";
+        PlayerPoints_box.Text = "";
+        KrupierPoints_box.Text = "";
         LastCard_text.Text = "🂠";
-        ResultOverlay.IsVisible = false;
-
-        for (int i = 2; i < 15; i++) // Zaczynamy od 1, kończymy na 15
-        {
-            for(int j=0;j<4;j++){
-                talia.Add(new Card((Rank)i, (Suit)j));
-            }
-            
-        }
-
-        tasuj_karty(talia);
-        //wstep do gry
-        wstep_bj(gracz,talia,krupier);
-        //checking if there is an blackjack
-        show_result();
-        if(is_21(gracz)){
-            gracz_wygrywa();
-            return;
-        }
-        
-        
-        
-
-    
-
     }
-    public bool gra_dalej(List<Card> gracz)
+
+    private void RefreshBettingUi()
     {
-        int sum_gracz = licz_punkty(gracz);
-        if(sum_gracz>21) return false;
-        return true;
-
+        Balance_box.Text = Wallet.Balance.ToString("0");
     }
-    public void DobierzKarte_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+
+    private void SetWaitingForBetUi()
     {
-        if (gracz.Count == 0 || talia.Count == 0)
-        {
-            Verdict_box.Text = "Rozpocznij grę!";
-            return;
-        }
-
-        dobierz_karte(gracz, talia);
-        show_result();
-        if (!gra_dalej(gracz))
-        {
-            gracz_przegrywa();
-            return;
-        }
-        
+        _roundState = RoundState.WaitingForBet;
+        hit_btn.IsEnabled = false;
+        stop_btn.IsEnabled = false;
+        PlaceBet_btn.IsEnabled = true;
     }
-    public async void NieDobieraj(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+
+    private void SetPlayingUi()
     {
-        //teraz krupier zaczyna dobierac
-        int sum_krupier = licz_punkty(krupier);
-        if(sum_krupier==0) return;
-        while(sum_krupier <= 16)
-        {
-            dobierz_karte(krupier,talia);
-            sum_krupier = licz_punkty(krupier);
-            show_result();
-            await System.Threading.Tasks.Task.Delay(4000);
-        }
-        int ver = check_winner(gracz,krupier);
-        switch (ver)
-        {
-            case 0: 
-                gracz_przegrywa();
-                break;
-            case 1:
-                gracz_wygrywa();
-                break;
-            case 2: 
-                gracz_remisuje();
-                break;
-       
-            default:
-            break;
-        }
-
+        _roundState = RoundState.Playing;
+        hit_btn.IsEnabled = true;
+        stop_btn.IsEnabled = true;
+        PlaceBet_btn.IsEnabled = false;
     }
 
-    
-    
+    private void SetRoundFinishedUi()
+    {
+        _roundState = RoundState.Finished;
+        hit_btn.IsEnabled = false;
+        stop_btn.IsEnabled = false;
+        PlaceBet_btn.IsEnabled = false;
+    }
+
+    private void ShowBetValidationMessage(string message)
+    {
+        BetStatus_text.Text = message;
+    }
+
+    private int? TryReadBetFromInput()
+    {
+        if (!int.TryParse(BetInput_box.Text, out int bet) || bet <= 0)
+            return null;
+
+        return bet;
+    }
+
+    private void ShowRoundMoneyResult(int delta)
+    {
+        ResultOverlay_money.Text = delta switch
+        {
+            > 0 => $"+{delta} pkt",
+            < 0 => $"{delta} pkt",
+            _ => "0 pkt"
+        };
+    }
+
+    private void ClearBetInput()
+    {
+        BetInput_box.Text = "";
+    }
 }

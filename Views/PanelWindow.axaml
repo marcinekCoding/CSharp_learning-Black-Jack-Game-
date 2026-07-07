@@ -254,6 +254,52 @@
                                 HorizontalAlignment="Center"
                                 Click="Black_Jack"/>
 
+                        <!-- ===== BETTING SECTION ===== -->
+                        <Border Background="#0d1b2a" CornerRadius="10" Padding="12,10" Margin="0,2">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="BETTING"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           Foreground="#fdcb6e"
+                                           LetterSpacing="2"
+                                           HorizontalAlignment="Center"/>
+
+                                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                    <TextBlock Text="Balance:" Classes="game-label" Width="68"/>
+                                    <TextBox Name="Balance_box"
+                                             Classes="game-field"
+                                             Width="120"
+                                             Text="100"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                                    <TextBlock Text="Bet:" Classes="game-label" Width="68"/>
+                                    <TextBox Name="BetInput_box"
+                                             Width="120"
+                                             Background="#0a0a1a"
+                                             Foreground="#ffeaa7"
+                                             BorderBrush="#0f3460"
+                                             BorderThickness="1"
+                                             CornerRadius="8"
+                                             FontSize="16"
+                                             FontWeight="SemiBold"
+                                             Padding="12,8"
+                                             PlaceholderText="np. 50"/>
+                                    <Button Name="PlaceBet_btn"
+                                            Content="POSTAW"
+                                            Classes="btn-accent"
+                                            Width="110"
+                                            Click="PlaceBet_Click"/>
+                                </StackPanel>
+
+                                <TextBlock Name="BetStatus_text"
+                                           Text="Najpierw postaw zaklad."
+                                           FontSize="12"
+                                           Foreground="#b2bec3"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
                         <Separator Background="#0f3460" Height="1" Margin="0,2"/>
 
                         <!-- ===== DEALER SECTION ===== -->
@@ -339,11 +385,13 @@
                                     Content="🂠 HIT" 
                                     Classes="btn-hit"
                                     Width="140"
+                                    IsEnabled="False"
                                     Click="DobierzKarte_Click"/>
                             <Button Name="stop_btn" 
                                     Content="✋ STAND" 
                                     Classes="btn-stand"
                                     Width="140"
+                                    IsEnabled="False"
                                     Click="NieDobieraj"/>
                         </StackPanel>
 
@@ -425,6 +473,12 @@
                                    Text=""
                                    FontSize="14"
                                    Foreground="#b2bec3"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Name="ResultOverlay_money"
+                                   Text=""
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="#fdcb6e"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
 

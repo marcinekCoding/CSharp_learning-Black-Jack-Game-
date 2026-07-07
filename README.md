@@ -63,17 +63,30 @@ dotnet run
 
 ```
 MojeLogowanieGUI/
-├── App.axaml                 # Konfiguracja aplikacji i motywu
-├── App.axaml.cs
-├── Program.cs                # Punkt wejścia aplikacji
-├── MainWindow.axaml          # UI ekranu logowania
-├── MainWindow.axaml.cs       # Logika logowania
-├── RegisterWindow.axaml      # UI ekranu rejestracji
-├── RegisterWindow.axaml.cs   # Logika rejestracji i walidacji hasła
-├── PanelWindow.axaml         # UI panelu gry Blackjack
-├── PanelWindow.axaml.cs      # Logika gry Blackjack
-├── card.cs                   # Klasa Card + enumy Rank i Suit
-└── MojeLogowanieGUI.csproj   # Plik projektu .NET
+├── Models/
+│   ├── Card.cs               # Karta + enumy Rank i Suit
+│   ├── Wallet.cs             # Saldo gracza i zakłady
+│   ├── RoundState.cs         # Stan rundy (obstawianie / gra / koniec)
+│   └── GameResult.cs         # Wynik rundy (wygrana / przegrana / remis)
+├── Services/
+│   └── BlackjackEngine.cs    # Logika gry (talia, rozdawanie, wynik)
+├── Views/
+│   ├── MainWindow.axaml(.cs)       # Logowanie
+│   ├── RegisterWindow.axaml(.cs)   # Rejestracja
+│   └── PanelWindow.axaml(.cs)      # UI gry (cienka warstwa — tylko kliknięcia)
+├── testy_jednostkowe/
+│   ├── BlackjackEngineTests.cs
+│   ├── WalletTests.cs
+│   └── PanelWindowTests.cs
+├── App.axaml(.cs)
+├── Program.cs
+└── MojeLogowanieGUI.csproj
+```
+
+### Flow rundy blackjacka
+
+```
+NEW GAME → czekanie na zakład → POSTAW → rozdanie kart → HIT/STAND → wynik + wypłata
 ```
 
 ---
